@@ -8,9 +8,9 @@ services:
     image: jupyterlab
     container_name: jupyterlab
     ports:
-      - 8888:8888
+      - 80:8888
     volumes:
-      - C:\\shared-workspace:/opt/workspace
+      - shared-workspace:/opt/workspace
   spark-master:
     image: spark-master
     container_name: spark-master
@@ -73,7 +73,6 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka:29092
       CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:32181
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
