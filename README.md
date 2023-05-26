@@ -17,27 +17,27 @@ If it is the first time, we must run each of these command one by one separately
 
 This command to build the image of cluster-base
 ```s
-docker build -f cluster-base.Dockerfile -t cluster-base .
+docker build --network=host -f cluster-base.Dockerfile -t cluster-base .
 ```
 
 This command to build the image of spark-base
 ```s
-docker build -f spark-base.Dockerfile -t spark-base .
+docker build --network=host -f spark-base.Dockerfile -t spark-base .
 ```
 
 This command to build the image of spark-master
 ```s
-docker build -f spark-master.Dockerfile -t spark-master .
+docker build --network=host -f spark-master.Dockerfile -t spark-master .
 ```
 
 This command to build the image of spark-worker
 ```s
-docker build -f spark-worker.Dockerfile -t spark-worker .
+docker build --network=host -f spark-worker.Dockerfile -t spark-worker .
 ```
 
 This command to build the image of jupyterlab
 ```s
-docker build -f jupyterlab.Dockerfile -t jupyterlab .
+docker build --network=host -f jupyterlab.Dockerfile -t jupyterlab .
 ```
 
 Run the following command to check if all images are created properly
@@ -49,6 +49,8 @@ Assuming docker compose is installed properly, either for Windows or Linux. We r
 ```s
 docker compose up -d
 ```
+
+At this point, you can open Google Chrome on your corporate laptop and typen in http://IP_ADDRESS_OF_LINUX_VM:80/tree to access the jupyterlab.
 
 # Kafka
 Pay attention that the docker-compose.yml also include a pack of kakfa, zookeeper and kafka-connect-datagen. After running docker compose up, kakfa will be installed. Once being sure all containers are up and running, we run the follow command to generate data 
