@@ -50,6 +50,8 @@ Assuming docker compose is installed properly, either for Windows or Linux. We r
 docker compose up -d
 ```
 
+At this point, you can open Google Chrome on your corporate laptop and typen in http://IP_ADDRESS_OF_LINUX_VM:80/tree to access the jupyterlab.
+
 # Kafka
 Pay attention that the docker-compose.yml also include a pack of kakfa, zookeeper and kafka-connect-datagen. After running docker compose up, kakfa will be installed. Once being sure all containers are up and running, we run the follow command to generate data 
 ```s
