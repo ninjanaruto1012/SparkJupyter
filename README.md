@@ -40,6 +40,15 @@ This command to build the image of jupyterlab
 docker build --network=host -f jupyterlab.Dockerfile -t jupyterlab .
 ```
 
+This command to build the image of remote mlflow server
+```s
+docker build --network=host -f mlflow-remote.Dockerfile -t mlflowremote .
+```
+
+This command to build the image of remote mlflow server
+```s
+docker build --network=host -f mlflow-serve.Dockerfile -t mlflowserve .
+```
 Run the following command to check if all images are created properly
 ```s
 docker images
