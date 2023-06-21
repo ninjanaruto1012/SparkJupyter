@@ -46,7 +46,7 @@ services:
       - AWS_SECRET_ACCESS_KEY=minioadmin
     ports:
       - 5050:5000
-    command: mlflow models serve --model-uri s3://mlflow/artifacts/0/bc723eea02de4da886d62763c72d2b49/artifacts/lstm_model_for_workload --host 0.0.0.0 --port 5000 --no-conda
+    command: mlflow models serve --model-uri s3://mlflow/artifacts/0/adfc4f58c8e64b38bd8a07cd36256104/artifacts/rnn_model --host 0.0.0.0 --port 5000 --no-conda
   mlflow-server:
     image: mlflowremote
     container_name: mlflowremote

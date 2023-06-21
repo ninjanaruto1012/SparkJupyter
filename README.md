@@ -73,3 +73,58 @@ docker-compose exec connect kafka-console-consumer --topic pageviews --bootstrap
 To have a better visualization of data in Kafka cluster, follow these links to install Kafka tools (now is called Offset)
 
 https://www.baeldung.com/ops/kafka-docker-setup
+
+# How to write script to generate data in VM
+
+First create a directory mon-scripts inside the home/ubuntu folder
+
+```s
+mkdir mon-scripts
+cat stats.sh
+```
+create a new file stats.sh
+```s
+vi stats.sh
+```
+with the content below
+```s
+#! /bin/bash
+while :
+printf "Generating log"
+do
+TS=$(TZ="EST" date +"%d-%m-%y %r")
+MEMORY=$(free -m | awk 'NR==2{printf "%.2f%%\t\t", $3*100/$2 }')
+DISK=$(df -h | awk '$NF=="/"{printf "%s\t\t", $5}')
+CPU=$(top -bn1 | grep load | awk '{printf "%.2f%%\t\t\n", $(NF-2)}')
+echo "timestamp: $TS, used_memory: $MEMORY, used_storage: $DISK, used_cpu: $CPU" >> mon-vm.log
+sleep 60
+done
+```
+We must assign chmod 777 to the file stats.sh to turn it into executable
+```s
+chmod 777 stats.sh
+```
+Now, we will run it forever no hang up by using the following command
+```s
+nohup ./stats.sh
+```
+Remember that, after run this command, we must close the window to turn off the session, DO NOT press Ctrl + C here, otherwise it won't work
+
+To kill the process which runs the nohup ./stats.sh forever, we must find the PID
+```s
+sudo ps -aux | grep stats.sh
+```
+alwasy look for the right process which has the form /bin/bash ./stats.sh
+
+```s
+ubuntu    935765  0.0  0.0   8616  2872 ?        S    Jun09   0:52 /bin/bash ./stats.sh
+```
+the PID is 935765. Then we use kill -9 to kill it
+
+
+```s
+kill -9 <PID>
+```
+example: kill -9 2616 where 2616 is PID of admis+ for the command ./stats.sh
+
+
