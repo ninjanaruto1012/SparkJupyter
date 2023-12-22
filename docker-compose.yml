@@ -13,6 +13,7 @@ volumes:
     name: "mysql-db-data"
     driver: local
 services:
+  
   db:
     restart: always
     image: mysql/mysql-server:5.7.28
@@ -97,6 +98,18 @@ services:
       - shared-workspace:/opt/workspace
     depends_on:
       - spark-master
+  kafkawebservice:
+    restart: always
+    image: kafkawebservice
+    container_name: my-kafkawebservice
+    ports:
+      - 38080:8080
+  mongodb:
+    restart: always
+    image: mongo
+    container_name: my-mongo
+    ports:
+      - 27017:27017
   zookeeper:
     image: confluentinc/cp-zookeeper:5.0.0
     hostname: zookeeper

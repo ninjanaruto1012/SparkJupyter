@@ -49,6 +49,33 @@ This command to build the image of remote mlflow server
 ```s
 docker build --network=host -f mlflow-serve.Dockerfile -t mlflowserve .
 ```
+
+# Backend
+
+To build the backend which read data from kafka to webservice to frontend
+```s
+mvn clean package
+```
+Please note that we must have Maven 3.8.3 and Java 1.8.0_311 for this project
+
+Then we build a docker image with this 
+```s
+docker build -t kafkawebservice .
+```
+
+# Frontend
+To build the frontend, we must build the dist from a Angular project
+```s
+npm run build
+```
+
+Then we run the this to build docker
+```s
+docker build --network=host -t my-dashboard .
+```
+
+# Deploy SAAS
+
 Run the following command to check if all images are created properly
 ```s
 docker images
@@ -60,6 +87,8 @@ docker compose up -d
 ```
 
 At this point, you can open Google Chrome on your corporate laptop and typen in http://IP_ADDRESS_OF_LINUX_VM:80/tree to access the jupyterlab.
+
+
 
 # Kafka
 Pay attention that the docker-compose.yml also include a pack of kakfa, zookeeper and kafka-connect-datagen. After running docker compose up, kakfa will be installed. Once being sure all containers are up and running, we run the follow command to generate data 
