@@ -13,7 +13,12 @@ volumes:
     name: "mysql-db-data"
     driver: local
 services:
-  
+  my-dashboard:
+    restart: always
+    image: my-dashboard
+    container_name: my-dashboard
+    ports:
+      - 3000:80
   db:
     restart: always
     image: mysql/mysql-server:5.7.28
