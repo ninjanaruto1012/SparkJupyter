@@ -2,8 +2,8 @@ FROM cluster-base
 
 # -- Layer: Apache Spark
 
-ARG spark_version=3.2.4
-ARG hadoop_version=2.7
+ARG spark_version=3.3.2
+ARG hadoop_version=3
 
 RUN apt-get update -y && \
     apt-get install -y curl && \
