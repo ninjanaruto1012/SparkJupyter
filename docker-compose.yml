@@ -13,56 +13,56 @@ volumes:
     name: "mysql-db-data"
     driver: local
 services:
-  my-dashboard:
-    restart: always
-    image: my-dashboard
-    container_name: my-dashboard
-    ports:
-      - 3000:80
-  db:
-    restart: always
-    image: mysql/mysql-server:5.7.28
-    container_name: mlflow_db
-    expose:
-    - "3306"
-    environment:
-      - MYSQL_DATABASE=mlflowdb
-      - MYSQL_USER=mlflow
-      - MYSQL_PASSWORD=123456
-      - MYSQL_ROOT_PASSWORD=admin
-    volumes:
-        - dbdata:/var/lib/mysql
-  minio:
-    image: quay.io/minio/minio
-    command: server /data --console-address ":9001"
-    environment:
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin
-    volumes:
-      - minio_data:/data
-    ports:
-      - 9000:9000
-      - 8000:9001
-  mlflow-client:
-    image: mlflowserve
-    container_name: mlflowserve
-    environment:
-      - MLFLOW_S3_ENDPOINT_URL=http://sparkjupyter-minio-1:9000
-      - AWS_ACCESS_KEY_ID=minioadmin
-      - AWS_SECRET_ACCESS_KEY=minioadmin
-    ports:
-      - 5050:5000
-    command: mlflow models serve --model-uri s3://mlflow/artifacts/0/bc723eea02de4da886d62763c72d2b49/artifacts/lstm_model_for_workload --host 0.0.0.0 --port 5000 --no-conda
-  mlflow-server:
-    image: mlflowremote
-    container_name: mlflowremote
-    environment:
-      - MLFLOW_S3_ENDPOINT_URL=http://sparkjupyter-minio-1:9000
-      - AWS_ACCESS_KEY_ID=minioadmin
-      - AWS_SECRET_ACCESS_KEY=minioadmin
-    ports:
-      - 8081:5000
-    command: mlflow server --host 0.0.0.0 --port 5000 --default-artifact-root s3://mlflow/artifacts --backend-store-uri mysql+pymysql://mlflow:123456@mlflow_db:3306/mlflowdb
+  # my-dashboard:
+  #   restart: always
+  #   image: my-dashboard
+  #   container_name: my-dashboard
+  #   ports:
+  #     - 3000:80
+  # db:
+  #   restart: always
+  #   image: mysql/mysql-server:5.7.28
+  #   container_name: mlflow_db
+  #   expose:
+  #   - "3306"
+  #   environment:
+  #     - MYSQL_DATABASE=mlflowdb
+  #     - MYSQL_USER=mlflow
+  #     - MYSQL_PASSWORD=123456
+  #     - MYSQL_ROOT_PASSWORD=admin
+  #   volumes:
+  #       - dbdata:/var/lib/mysql
+  # minio:
+  #   image: quay.io/minio/minio
+  #   command: server /data --console-address ":9001"
+  #   environment:
+  #     - MINIO_ROOT_USER=minioadmin
+  #     - MINIO_ROOT_PASSWORD=minioadmin
+  #   volumes:
+  #     - minio_data:/data
+  #   ports:
+  #     - 9000:9000
+  #     - 8000:9001
+  # mlflow-client:
+  #   image: mlflowserve
+  #   container_name: mlflowserve
+  #   environment:
+  #     - MLFLOW_S3_ENDPOINT_URL=http://sparkjupyter-minio-1:9000
+  #     - AWS_ACCESS_KEY_ID=minioadmin
+  #     - AWS_SECRET_ACCESS_KEY=minioadmin
+  #   ports:
+  #     - 5050:5000
+  #   command: mlflow models serve --model-uri s3://mlflow/artifacts/0/bc723eea02de4da886d62763c72d2b49/artifacts/lstm_model_for_workload --host 0.0.0.0 --port 5000 --no-conda
+  # mlflow-server:
+  #   image: mlflowremote
+  #   container_name: mlflowremote
+  #   environment:
+  #     - MLFLOW_S3_ENDPOINT_URL=http://sparkjupyter-minio-1:9000
+  #     - AWS_ACCESS_KEY_ID=minioadmin
+  #     - AWS_SECRET_ACCESS_KEY=minioadmin
+  #   ports:
+  #     - 8081:5000
+  #   command: mlflow server --host 0.0.0.0 --port 5000 --default-artifact-root s3://mlflow/artifacts --backend-store-uri mysql+pymysql://mlflow:123456@mlflow_db:3306/mlflowdb
   jupyterlab:
     image: jupyterlab
     container_name: jupyterlab
@@ -103,97 +103,97 @@ services:
       - shared-workspace:/opt/workspace
     depends_on:
       - spark-master
-  kafkawebservice:
-    restart: always
-    image: kafkawebservice
-    container_name: my-kafkawebservice
-    ports:
-      - 38080:8080
-  mongodb:
-    restart: always
-    image: mongo
-    container_name: my-mongo
-    ports:
-      - 27017:27017
-  zookeeper:
-    image: confluentinc/cp-zookeeper:5.0.0
-    hostname: zookeeper
-    container_name: zookeeper
-    ports:
-      - '32181:32181'
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 32181
-      ZOOKEEPER_TICK_TIME: 2000
-    extra_hosts:
-      - "moby:127.0.0.1"
+  # kafkawebservice:
+  #   restart: always
+  #   image: kafkawebservice
+  #   container_name: my-kafkawebservice
+  #   ports:
+  #     - 38080:8080
+  # mongodb:
+  #   restart: always
+  #   image: mongo
+  #   container_name: my-mongo
+  #   ports:
+  #     - 27017:27017
+  # zookeeper:
+  #   image: confluentinc/cp-zookeeper:5.0.0
+  #   hostname: zookeeper
+  #   container_name: zookeeper
+  #   ports:
+  #     - '32181:32181'
+  #   environment:
+  #     ZOOKEEPER_CLIENT_PORT: 32181
+  #     ZOOKEEPER_TICK_TIME: 2000
+  #   extra_hosts:
+  #     - "moby:127.0.0.1"
 
-  kafka:
-    image: confluentinc/cp-enterprise-kafka:5.0.0
-    hostname: kafka
-    container_name: kafka
-    ports:
-      - '9092:9092'
-      - '29092:29092'
-    depends_on:
-      - zookeeper
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:32181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
-      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka:29092
-      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:32181
-      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
-      CONFLUENT_METRICS_ENABLE: 'true'
-      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
-    extra_hosts:
-      - "moby:127.0.0.1"
+  # kafka:
+  #   image: confluentinc/cp-enterprise-kafka:5.0.0
+  #   hostname: kafka
+  #   container_name: kafka
+  #   ports:
+  #     - '9092:9092'
+  #     - '29092:29092'
+  #   depends_on:
+  #     - zookeeper
+  #   environment:
+  #     KAFKA_BROKER_ID: 1
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:32181
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+  #     KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #     KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+  #     CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka:29092
+  #     CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:32181
+  #     CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+  #     CONFLUENT_METRICS_ENABLE: 'true'
+  #     CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+  #   extra_hosts:
+  #     - "moby:127.0.0.1"
 
-  schema-registry:
-    image: confluentinc/cp-schema-registry:5.0.0
-    hostname: schema-registry
-    container_name: schema-registry
-    depends_on:
-      - zookeeper
-      - kafka
-    ports:
-      - '5000:8081'
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:32181
-    extra_hosts:
-      - "moby:127.0.0.1"
+  # schema-registry:
+  #   image: confluentinc/cp-schema-registry:5.0.0
+  #   hostname: schema-registry
+  #   container_name: schema-registry
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka
+  #   ports:
+  #     - '5000:8081'
+  #   environment:
+  #     SCHEMA_REGISTRY_HOST_NAME: schema-registry
+  #     SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:32181
+  #   extra_hosts:
+  #     - "moby:127.0.0.1"
 
-  connect:
-    image: cnfldemos/kafka-connect-datagen:0.2.0-5.4.0
-    container_name: connect
-    restart: always
-    ports:
-      - "8083:8083"
-    depends_on:
-      - zookeeper
-      - kafka
-    environment:
-      CONNECT_BOOTSTRAP_SERVERS: kafka:29092
-      CONNECT_REST_PORT: 8083
-      CONNECT_REST_ADVERTISED_HOST_NAME: connect
-      CONNECT_GROUP_ID: compose-connect-group
-      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
-      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
-      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
-      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
-      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
-      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
-      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
-      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
-      CONNECT_ZOOKEEPER_CONNECT: 'zookeeper:32181'
-      CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
-      CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
+  # connect:
+  #   image: cnfldemos/kafka-connect-datagen:0.2.0-5.4.0
+  #   container_name: connect
+  #   restart: always
+  #   ports:
+  #     - "8083:8083"
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka
+  #   environment:
+  #     CONNECT_BOOTSTRAP_SERVERS: kafka:29092
+  #     CONNECT_REST_PORT: 8083
+  #     CONNECT_REST_ADVERTISED_HOST_NAME: connect
+  #     CONNECT_GROUP_ID: compose-connect-group
+  #     CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
+  #     CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+  #     CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
+  #     CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
+  #     CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+  #     CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
+  #     CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+  #     CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+  #     CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+  #     CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+  #     CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+  #     CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+  #     CONNECT_ZOOKEEPER_CONNECT: 'zookeeper:32181'
+  #     CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
+  #     CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
