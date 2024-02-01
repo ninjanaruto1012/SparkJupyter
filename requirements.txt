@@ -18,3 +18,5 @@ statsforecast
 datasetsforecast
 mlforecast
 sktime[mlflow]
+torch
+torchvision
